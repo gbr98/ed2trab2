@@ -19,6 +19,70 @@ class BinSearchTree<T> {
     return null;
   }
 
+  /**
+  * Basic Left-Right rotation for binary search tree
+  * @params node: the x node
+  */
+  public void rotateLR(BinTreeNode<T> node){
+    BinTreeNode<T> parent = node.getParent();
+    BinTreeNode<T> gparent = parent.getParent();
+    BinTreeNode<T> ggparent = gparent.getParent();
+
+    //first step
+    if(ggparent != null){
+      if(ggparent.getLeftChild() == gparent){
+        ggparent.setLeftChild(node);
+      } else {
+        ggparent.setRightChild(node);
+      }
+    }
+    node.setParent(ggparent);
+
+    //second step
+    gparent.setLeftChild(node.getRightChild());
+    node.getRightChild().setParent(gparent);
+    parent.setRightChild(node.getLeftChild());
+    node.getLeftChild().setParent(parent);
+
+    //third step
+    node.setLeftChild(parent);
+    parent.setParent(node);
+    node.setRightChild(gparent);
+    gparent.setParent(node);
+  }
+
+  /**
+  * Basic Right-Left rotation for binary search tree
+  * @params node: the x node
+  */
+  public void rotateRL(BinTreeNode<T> node){
+    BinTreeNode<T> parent = node.getParent();
+    BinTreeNode<T> gparent = parent.getParent();
+    BinTreeNode<T> ggparent = gparent.getParent();
+
+    //first step
+    if(ggparent != null){
+      if(ggparent.getLeftChild() == gparent){
+        ggparent.setLeftChild(node);
+      } else {
+        ggparent.setRightChild(node);
+      }
+    }
+    node.setParent(ggparent);
+
+    //second step
+    gparent.setRightChild(node.getLeftChild());
+    node.getLeftChild().setParent(gparent);
+    parent.setLeftChild(node.getRightChild());
+    node.getRightChild().setParent(parent);
+
+    //third step
+    node.setLeftChild(gparent);
+    gparent.setParent(node);
+    node.setRightChild(parent);
+    parent.setParent(node);
+  }
+
   public void printTree(){
     printTreeR(this.root);
     System.out.println();
