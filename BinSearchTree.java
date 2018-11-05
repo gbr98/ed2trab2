@@ -12,6 +12,18 @@ class BinSearchTree<T> {
   }
 
   public T search(int key){
+    BinTreeNode<T> a = this.root;
+    while(a != null){
+      if(a.getKey() == key){
+        return a.getValue();
+      } else {
+        if(key < a.getKey()){
+          a = a.getLeftChild();
+        } else {
+          a = a.getRightChild();
+        }
+      }
+    }
     return null;
   }
 
@@ -35,6 +47,8 @@ class BinSearchTree<T> {
       } else {
         ggparent.setRightChild(parent);
       }
+    } else {
+      this.root = parent;
     }
     parent.setParent(ggparent);
 
@@ -62,6 +76,8 @@ class BinSearchTree<T> {
       } else {
         ggparent.setRightChild(parent);
       }
+    } else {
+      this.root = parent;
     }
     parent.setParent(ggparent);
 
@@ -89,6 +105,8 @@ class BinSearchTree<T> {
       } else {
         ggparent.setRightChild(node);
       }
+    } else {
+      this.root = node;
     }
     node.setParent(ggparent);
 
@@ -123,6 +141,8 @@ class BinSearchTree<T> {
       } else {
         ggparent.setRightChild(node);
       }
+    } else {
+      this.root = node;
     }
     node.setParent(ggparent);
 

@@ -2,12 +2,12 @@ class RnBTree<T> extends BinSearchTree<T> {
 
   @Override
   public void add(int key, T x){
-    BinTreeNode<T> chosen = this.getRoot();
-    BinTreeNode<T> side = chosen;
-    BinTreeNode<T> newNode;
+    RnBTreeNode<T> chosen = this.getRoot();
+    RnBTreeNode<T> side = chosen;
+    RnBTreeNode<T> newNode;
 
     if(this.getRoot() == null){
-      this.setRoot(new BinTreeNode<T>(key, x, null));
+      this.setRoot(new RnBTreeNode<T>(key, x, null));
       return;
     }
 
@@ -16,7 +16,7 @@ class RnBTree<T> extends BinSearchTree<T> {
       side = (key < chosen.getKey() ? chosen.getLeftChild() : chosen.getRightChild());
     } while(side != null);
 
-    newNode = new BinTreeNode<>(key, x, chosen);
+    newNode = new RnBTreeNode<>(key, x, chosen);
 
     if(key < chosen.getKey()){
       chosen.setLeftChild(newNode);
@@ -24,8 +24,11 @@ class RnBTree<T> extends BinSearchTree<T> {
       chosen.setRightChild(newNode);
     }
 
-    //rotate and recolorize [TODO]
-
+    //rotate and recolorize [OK?]
+    rotate(newNode);
+    if(root.getColor() == 1){ //root is always a black node
+      root.recolorize();
+    }
     //...
   }
 
@@ -39,7 +42,57 @@ class RnBTree<T> extends BinSearchTree<T> {
     return null;
   }
 
-  public void recolorize(BinTreeNode<T> node){
-    node.setKey((-1)*node.getKey());
+  /**
+  * Recursive function to balance the tree
+  */
+  public void rotate(RnBTreeNode<T> node){
+    RnBTreeNode<T> parent = node.getParent();
+    RnBTreeNode<T> gparent = parent.getParent();
+
+    boolean isNodeRightChild = (parent.getRightChild() == node);
+    boolean isParentRightChild = (gparent.getRightChild() == parent);
+
+    if(node.getColor() != 1 || parent.getColor() != 1) return; //nothing to do
+
+    //first case : simple rotation
+    if(isNodeRightChild && isParentRightChild){
+      rotateLeft(node);
+      parent.recolorize();
+      gparent.recolorize();
+      rotate(parent); //recursion
+      return;
+    } else if(!isNodeRightChild && !isParentRightChild){
+      rotateRight(node);
+      parent.recolorize();
+      gparent.recolorize();
+      rotate(parent); //recursion
+      return;
+    }
+
+    //second case : pull down blackness
+    if((isParentRightChild && gparent.getLeftChild().getColor() == 1) || (!isParentRightChild && gparent.getRightChild().getColor() == 1)){
+      gparent.recolorize();
+      gparent.getRightChild().recolorize();
+      gparent.getLeftChild().recolorize();
+      rotate(gparent);
+      return; //?
+    }
+
+    //third case: double rotate
+    if(isNodeRightChild){
+      //rotate LR
+      rotateLR(node);
+      node.recolorize();
+      gparent.recolorize();
+      rotate(node);
+      return;
+    } else {
+      //rotate RL
+      rotateRL(node);
+      node.recolorize();
+      gparent.recolorize();
+      rotate(node);
+      return;
+    }
   }
 }
