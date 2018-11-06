@@ -170,7 +170,7 @@ class BinSearchTree<T> {
     if(root != null){
       System.out.print(root.getKey()+" ");
     } else {
-      System.out.print("NIL "); return;
+      System.out.print("\033[1;31mNIL \033[0m"); return;
     }
     printTreeR(root.getLeftChild());
     printTreeR(root.getRightChild());
