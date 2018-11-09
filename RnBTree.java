@@ -46,7 +46,7 @@ class RnBTree<T> extends BinSearchTree<T> {
   /**
   * Recursive function to balance the tree
   */
-  public void rotate(RnBTreeNode<T> node){
+  private void rotate(RnBTreeNode<T> node){
     RnBTreeNode<T> parent = (RnBTreeNode<T>) node.getParent();
     if(parent == null) return;
     RnBTreeNode<T> gparent = (RnBTreeNode<T>) parent.getParent();

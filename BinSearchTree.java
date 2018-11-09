@@ -12,10 +12,15 @@ class BinSearchTree<T> {
   }
 
   public T search(int key){
+    BinTreeNode<T> a = searchNode(key);
+    return (a != null ? a.getValue() : null);
+  }
+
+  public BinTreeNode<T> searchNode(int key){
     BinTreeNode<T> a = this.root;
     while(a != null){
       if(a.getKey() == key){
-        return a.getValue();
+        return a;
       } else {
         if(key < a.getKey()){
           a = a.getLeftChild();
@@ -33,6 +38,62 @@ class BinSearchTree<T> {
 
   /**
   * Basic Right rotation for binary search tree
+  * @params node: the x node
+  */
+  public void simpleRotateRight(BinTreeNode<T> node){
+    BinTreeNode<T> parent = node.getParent();
+    BinTreeNode<T> gparent = parent.getParent();
+
+    //first step
+    if(gparent != null){
+      if(gparent.getLeftChild() == parent){
+        gparent.setLeftChild(node);
+      } else {
+        gparent.setRightChild(node);
+      }
+    } else {
+      this.root = node;
+    }
+    node.setParent(gparent);
+
+    //second step
+    parent.setLeftChild(node.getRightChild());
+    if(node.getRightChild() != null)
+      node.getRightChild().setParent(parent);
+    node.setRightChild(parent);
+    parent.setParent(node);
+  }
+
+  /**
+  * Basic Left rotation for binary search tree
+  * @params node: the x node
+  */
+  public void simpleRotateLeft(BinTreeNode<T> node){
+    BinTreeNode<T> parent = node.getParent();
+    BinTreeNode<T> gparent = parent.getParent();
+
+    //first step
+    if(gparent != null){
+      if(gparent.getLeftChild() == parent){
+        gparent.setLeftChild(node);
+      } else {
+        gparent.setRightChild(node);
+      }
+    } else {
+      this.root = node;
+    }
+    node.setParent(gparent);
+
+    //second step
+    parent.setRightChild(node.getLeftChild());
+    if(node.getLeftChild() != null)
+      node.getLeftChild().setParent(parent);
+    node.setLeftChild(parent);
+    parent.setParent(node);
+  }
+
+  /**
+  * Basic Right-Right rotation for binary search tree
   * @params node: the x node
   */
   public void rotateRight(BinTreeNode<T> node){
@@ -61,7 +122,7 @@ class BinSearchTree<T> {
   }
 
   /**
-  * Basic Left rotation for binary search tree
+  * Basic Left-Left rotation for binary search tree
   * @params node: the x node
   */
   public void rotateLeft(BinTreeNode<T> node){
@@ -168,9 +229,12 @@ class BinSearchTree<T> {
 
   private void printTreeR(BinTreeNode<T> root){
     if(root != null){
-      System.out.print(root.getKey()+" ");
+      System.out.print("\033[1;37;44m "+root.getKey()+" \033[0m");
+      System.out.print(" ");
     } else {
-      System.out.print("\033[1;31mNIL \033[0m"); return;
+      System.out.print("\033[1;37;41mNIL\033[0m");
+      System.out.print(" ");
+      return;
     }
     printTreeR(root.getLeftChild());
     printTreeR(root.getRightChild());
