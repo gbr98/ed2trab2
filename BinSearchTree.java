@@ -2,6 +2,9 @@ class BinSearchTree<T> {
   private BinTreeNode<T> root;
   private int n;
 
+  private long comp;
+  private long copy;
+
   public BinSearchTree(){
     this.n = 0;
     this.root = null;
@@ -254,5 +257,29 @@ class BinSearchTree<T> {
 
   public void setN(int n){
     this.n = n;
+  }
+
+  public void addComp(){
+    this.comp += 1;
+  }
+
+  public void addCopy(){
+    this.copy += 1;
+  }
+
+  public void addComp(long n){
+    this.comp += n;
+  }
+
+  public void addCopy(long n){
+    this.copy += n;
+  }
+
+  public long getComp(){
+    return this.comp;
+  }
+
+  public long getCopy(){
+    return this.copy;
   }
 }
