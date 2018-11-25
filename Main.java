@@ -122,7 +122,9 @@ class Main {
         printToFile("resultsRem.txt", "N="+n+" TREE"+(i+1)+" COMP "+comp[i][3]/5+"\n");
         printToFile("resultsRem.txt", "N="+n+" TREE"+(i+1)+" COPY "+copy[i][3]/5+"\n\n");
 
-
+        printToFile("resultsRem2.txt", "N="+n+" TREE"+(i+1)+" TIME "+time[i][4]/5+"\n");
+        printToFile("resultsRem2.txt", "N="+n+" TREE"+(i+1)+" COMP "+comp[i][4]/5+"\n");
+        printToFile("resultsRem2.txt", "N="+n+" TREE"+(i+1)+" COPY "+copy[i][4]/5+"\n\n");
       }
     }
   }
