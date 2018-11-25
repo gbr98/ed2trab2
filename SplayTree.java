@@ -13,16 +13,20 @@ class SplayTree<T> extends BinSearchTree<T> {
 
     do {
       chosen = side;
+      addComp();
+      addCopy();
       side = (key < chosen.getKey() ? chosen.getLeftChild() : chosen.getRightChild());
     } while(side != null);
 
     newNode = new BinTreeNode<>(key, x, chosen);
 
+    addComp();
     if(key < chosen.getKey()){
       chosen.setLeftChild(newNode);
     } else {
       chosen.setRightChild(newNode);
     }
+    addCopy();
 
     //rotate
     rotate(newNode);

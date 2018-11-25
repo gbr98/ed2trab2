@@ -14,6 +14,7 @@ class RnBTree<T> extends BinSearchTree<T> {
 
     do {
       chosen = side;
+      addCopy();
       addComp();
       side = (RnBTreeNode<T>)(key < chosen.getKey() ? chosen.getLeftChild() : chosen.getRightChild());
     } while(side != null);
