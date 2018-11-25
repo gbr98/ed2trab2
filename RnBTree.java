@@ -14,11 +14,13 @@ class RnBTree<T> extends BinSearchTree<T> {
 
     do {
       chosen = side;
+      addComp();
       side = (RnBTreeNode<T>)(key < chosen.getKey() ? chosen.getLeftChild() : chosen.getRightChild());
     } while(side != null);
 
     newNode = new RnBTreeNode<>(key, x, chosen);
 
+    addComp();
     if(key < chosen.getKey()){
       chosen.setLeftChild(newNode);
     } else {
@@ -31,11 +33,6 @@ class RnBTree<T> extends BinSearchTree<T> {
       ((RnBTreeNode<T>)this.getRoot()).recolorize();
     }
     //...
-  }
-
-  @Override
-  public T search(int key){
-    return null;
   }
 
   @Override
@@ -56,12 +53,14 @@ class RnBTree<T> extends BinSearchTree<T> {
     boolean isParentRightChild = (gparent.getRightChild() == parent);
 
     if(node.getColor() != 1 || parent.getColor() != 1) return; //nothing to do
+    addComp(2);
 
     //second case (first) : pull down blackness
     RnBTreeNode<T> gparentlc = (RnBTreeNode<T>)gparent.getLeftChild();
     RnBTreeNode<T> gparentrc = (RnBTreeNode<T>)gparent.getRightChild();
     int lccolor = (gparentlc == null ? 0 : gparentlc.getColor());
     int rccolor = (gparentrc == null ? 0 : gparentrc.getColor());
+    addComp(2);
     if((isParentRightChild && lccolor == 1) || (!isParentRightChild && rccolor == 1)){
       gparent.recolorize();
       gparentrc.recolorize();

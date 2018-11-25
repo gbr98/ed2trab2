@@ -13,6 +13,7 @@ class Main {
     for(int n : values){
 
       BinSearchTree<Deputies>[] trees = new BinSearchTree[5];
+      BinSearchTree<Deputies>[] treesBk = new BinSearchTree[5];
 
       int[][] time = new int[trees.length][5]; //5 steps
       int[][] comp = new int[trees.length][5];
@@ -20,11 +21,11 @@ class Main {
 
       for(int i = 0; i < 5; i++){
 
-        trees[0] = new RnBTree<>();
-        trees[1] = new AVLTree<>();
-        trees[2] = new SplayTree<>();
-        trees[3] = new BTree<>();
-        trees[4] = new MyTree<>();
+        trees[0] = treesBk[0] = new RnBTree<>();
+        trees[1] = treesBk[1] = new AVLTree<>();
+        trees[2] = treesBk[2] = new SplayTree<>();
+        trees[3] = treesBk[3] = new BTree<>();
+        trees[4] = treesBk[4] = new MyTree<>();
 
         Deputies[] dep = Loader.loadRandomList("deputies_dataset.csv", n);
         System.out.println();
@@ -83,8 +84,24 @@ class Main {
           comp[j][3] += trees[j].getComp();
           copy[j][3] += trees[j].getCopy();
 
-          //remoton (2) >> Tree is not empty!
-          
+          //remoton (2) >> Tree is not empty, using backup
+          fillTree(treesBk[j], dep);
+          remSet = new int[n];
+          for(int k = 0; k < n*3/10.0; k++){
+            remSet[k] = dep[k];
+          }
+          for(int k = (int) Math.floor(n*3/10.0); k < n*6/10.0; k++){
+            remSet[k] = dep[k-((int)Math.floor(n*3/10.0))];
+          }
+          for(int k = (int) Math.floor(n*6/10.0); k < n; k++){
+            remSet[k] = r.nextInt(Loader.getLastNOLines());
+          }
+          Arrays.sort(remSet);
+          treesBk[j].resetComp();
+          treesBk[j].resetCopy();
+          time[j][4] += removeAll(treesBk[j], remSet);
+          comp[j][4] += treesBk[j].getComp();
+          copy[j][4] += treesBk[j].getCopy();
         }
       }
 
