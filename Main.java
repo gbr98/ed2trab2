@@ -1,5 +1,6 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.utils.Arrays;
 
 class Main {
   public static void main(String[] args){
@@ -50,19 +51,23 @@ class Main {
           copy[j][1] += trees[j].getCopy();
 
           //search (2)
-          int[] searchSet = new int[n];
+          searchSet = new int[n];
           Random r = new Random();
-          for(int k = 0; k < n/2; k++){
+          for(int k = 0; k < n*3/10.0; k++){
             searchSet[k] = dep[k];
           }
-          for(int k = n/2; k < n; k++){
+          for(int k = (int) Math.floor(n*3/10.0); k < n*6/10.0; k++){
+            searchSet[k] = dep[k-((int)Math.floor(n*3/10.0))];
+          }
+          for(int k = (int) Math.floor(n*6/10.0); k < n; k++){
             searchSet[k] = r.nextInt(Loader.getLastNOLines());
           }
+          Arrays.sort(searchSet);
           trees[j].resetComp();
           trees[j].resetCopy();
-          time[j][1] += searchAll(trees[j], searchSet);
-          comp[j][1] += trees[j].getComp();
-          copy[j][1] += trees[j].getCopy();
+          time[j][2] += searchAll(trees[j], searchSet);
+          comp[j][2] += trees[j].getComp();
+          copy[j][2] += trees[j].getCopy();
 
           //remotion (1)
           int[] remSet = new int[n];
@@ -77,6 +82,9 @@ class Main {
           time[j][3] += removeAll(trees[j], remSet);
           comp[j][3] += trees[j].getComp();
           copy[j][3] += trees[j].getCopy();
+
+          //remoton (2) >> Tree is not empty!
+          
         }
       }
 
@@ -89,9 +97,15 @@ class Main {
         printToFile("resultsSea.txt", "N="+n+" TREE"+(i+1)+" COMP "+comp[i][1]/5+"\n");
         printToFile("resultsSea.txt", "N="+n+" TREE"+(i+1)+" COPY "+copy[i][1]/5+"\n\n");
 
+        printToFile("resultsSea2.txt", "N="+n+" TREE"+(i+1)+" TIME "+time[i][2]/5+"\n");
+        printToFile("resultsSea2.txt", "N="+n+" TREE"+(i+1)+" COMP "+comp[i][2]/5+"\n");
+        printToFile("resultsSea2.txt", "N="+n+" TREE"+(i+1)+" COPY "+copy[i][2]/5+"\n\n");
+
         printToFile("resultsRem.txt", "N="+n+" TREE"+(i+1)+" TIME "+time[i][3]/5+"\n");
         printToFile("resultsRem.txt", "N="+n+" TREE"+(i+1)+" COMP "+comp[i][3]/5+"\n");
         printToFile("resultsRem.txt", "N="+n+" TREE"+(i+1)+" COPY "+copy[i][3]/5+"\n\n");
+
+
       }
     }
   }
@@ -116,6 +130,15 @@ class Main {
     long startTime = System.currentTimeMillis();
     for(int key : searchSet){
       tree.search(key);
+    }
+    long stopTime = System.currentTimeMillis();
+    return stopTime - startTime;
+  }
+
+  public static long removeAll(BinSearchTree<Deputies> tree, int[] remSet){
+    long startTime = System.currentTimeMillis();
+    for(int key : remSet){
+      tree.remove(key);
     }
     long stopTime = System.currentTimeMillis();
     return stopTime - startTime;
