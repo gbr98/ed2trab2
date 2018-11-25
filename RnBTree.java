@@ -26,6 +26,7 @@ class RnBTree<T> extends BinSearchTree<T> {
     } else {
       chosen.setRightChild(newNode);
     }
+    addCopy();
 
     //rotate and recolorize [OK?]
     rotate(newNode);

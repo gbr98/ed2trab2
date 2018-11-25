@@ -22,9 +22,11 @@ class BinSearchTree<T> {
   public BinTreeNode<T> searchNode(int key){
     BinTreeNode<T> a = this.root;
     while(a != null){
+      addComp();
       if(a.getKey() == key){
         return a;
       } else {
+        addComp();
         if(key < a.getKey()){
           a = a.getLeftChild();
         } else {
@@ -58,6 +60,7 @@ class BinSearchTree<T> {
       this.root = node;
     }
     node.setParent(gparent);
+    addCopy(2);
 
     //second step
     parent.setLeftChild(node.getRightChild());
@@ -65,6 +68,7 @@ class BinSearchTree<T> {
       node.getRightChild().setParent(parent);
     node.setRightChild(parent);
     parent.setParent(node);
+    addCopy(4);
   }
 
   /**
@@ -86,6 +90,7 @@ class BinSearchTree<T> {
       this.root = node;
     }
     node.setParent(gparent);
+    addCopy(2);
 
     //second step
     parent.setRightChild(node.getLeftChild());
@@ -93,6 +98,7 @@ class BinSearchTree<T> {
       node.getLeftChild().setParent(parent);
     node.setLeftChild(parent);
     parent.setParent(node);
+    addCopy(4);
   }
 
   /**
@@ -115,6 +121,7 @@ class BinSearchTree<T> {
       this.root = parent;
     }
     parent.setParent(ggparent);
+    addCopy(2);
 
     //second step
     gparent.setLeftChild(parent.getRightChild());
@@ -122,6 +129,7 @@ class BinSearchTree<T> {
       parent.getRightChild().setParent(gparent);
     parent.setRightChild(gparent);
     gparent.setParent(parent);
+    addCopy(4);
   }
 
   /**
@@ -144,6 +152,7 @@ class BinSearchTree<T> {
       this.root = parent;
     }
     parent.setParent(ggparent);
+    addCopy(2);
 
     //second step
     gparent.setRightChild(parent.getLeftChild());
@@ -151,6 +160,7 @@ class BinSearchTree<T> {
       parent.getLeftChild().setParent(gparent);
     parent.setLeftChild(gparent);
     gparent.setParent(parent);
+    addCopy(4);
   }
 
   /**
@@ -173,6 +183,7 @@ class BinSearchTree<T> {
       this.root = node;
     }
     node.setParent(ggparent);
+    addCopy(2);
 
     //second step
     gparent.setLeftChild(node.getRightChild());
@@ -181,12 +192,14 @@ class BinSearchTree<T> {
     parent.setRightChild(node.getLeftChild());
     if(node.getLeftChild() != null)
       node.getLeftChild().setParent(parent);
+    addCopy(4);
 
     //third step
     node.setLeftChild(parent);
     parent.setParent(node);
     node.setRightChild(gparent);
     gparent.setParent(node);
+    addCopy(4);
   }
 
   /**
@@ -209,6 +222,7 @@ class BinSearchTree<T> {
       this.root = node;
     }
     node.setParent(ggparent);
+    addCopy(2);
 
     //second step
     gparent.setRightChild(node.getLeftChild());
@@ -217,12 +231,14 @@ class BinSearchTree<T> {
     parent.setLeftChild(node.getRightChild());
     if(node.getRightChild() != null)
       node.getRightChild().setParent(parent);
+    addCopy(4);
 
     //third step
     node.setLeftChild(gparent);
     gparent.setParent(node);
     node.setRightChild(parent);
     parent.setParent(node);
+    addCopy(4);
   }
 
   public void printTree(){
