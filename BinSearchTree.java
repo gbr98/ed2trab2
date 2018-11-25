@@ -282,4 +282,12 @@ class BinSearchTree<T> {
   public long getCopy(){
     return this.copy;
   }
+
+  public void resetComp(){
+    this.comp = 0;
+  }
+
+  public void resetCopy(){
+    this.copy = 0;
+  }
 }

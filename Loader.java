@@ -194,4 +194,8 @@ class Loader {
     }
     return new String(array);
   }
+
+  public static int getLastNOLines(){
+    return Loader.lastNOLines;
+  }
 }
