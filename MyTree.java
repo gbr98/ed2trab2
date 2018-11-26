@@ -1,6 +1,6 @@
-class MyTree<T> extends AVLTree  
+public class MyTree <T> extends AVLTree <T>
 {
-    /**
+     /**
     * Recursive function to balance the tree
     */
     @Override
@@ -26,4 +26,6 @@ class MyTree<T> extends AVLTree
         }
         return node;
     }
+
+     
 }
