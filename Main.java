@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.utils.Arrays;
+import java.util.Arrays;
+import java.util.Random;
 
 class Main {
   public static void main(String[] args){
@@ -40,7 +41,7 @@ class Main {
           int[] searchSet = new int[n];
           Random r = new Random();
           for(int k = 0; k < n/2; k++){
-            searchSet[k] = dep[k];
+            searchSet[k] = dep[k].getID();
           }
           for(int k = n/2; k < n; k++){
             searchSet[k] = r.nextInt(Loader.getLastNOLines());
@@ -53,12 +54,12 @@ class Main {
 
           //search (2)
           searchSet = new int[n];
-          Random r = new Random();
+          r = new Random();
           for(int k = 0; k < n*3/10.0; k++){
-            searchSet[k] = dep[k];
+            searchSet[k] = dep[k].getID();
           }
           for(int k = (int) Math.floor(n*3/10.0); k < n*6/10.0; k++){
-            searchSet[k] = dep[k-((int)Math.floor(n*3/10.0))];
+            searchSet[k] = dep[k-((int)Math.floor(n*3/10.0))].getID();
           }
           for(int k = (int) Math.floor(n*6/10.0); k < n; k++){
             searchSet[k] = r.nextInt(Loader.getLastNOLines());
@@ -73,7 +74,7 @@ class Main {
           //remotion (1)
           int[] remSet = new int[n];
           for(int k = 0; k < n/2; k++){
-            remSet[k] = dep[k];
+            remSet[k] = dep[k].getID();
           }
           for(int k = n/2; k < n; k++){
             remSet[k] = r.nextInt(Loader.getLastNOLines());
@@ -88,10 +89,10 @@ class Main {
           fillTree(treesBk[j], dep);
           remSet = new int[n];
           for(int k = 0; k < n*3/10.0; k++){
-            remSet[k] = dep[k];
+            remSet[k] = dep[k].getID();
           }
           for(int k = (int) Math.floor(n*3/10.0); k < n*6/10.0; k++){
-            remSet[k] = dep[k-((int)Math.floor(n*3/10.0))];
+            remSet[k] = dep[k-((int)Math.floor(n*3/10.0))].getID();
           }
           for(int k = (int) Math.floor(n*6/10.0); k < n; k++){
             remSet[k] = r.nextInt(Loader.getLastNOLines());

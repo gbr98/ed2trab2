@@ -1,4 +1,4 @@
-class BinSearchTree<T> {
+class BinSearchTree<T> implements SearchTree<T> {
   private BinTreeNode<T> root;
   private int n;
 
