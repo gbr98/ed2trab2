@@ -246,6 +246,16 @@ class BinSearchTree<T> implements SearchTree<T> {
     System.out.println();
   }
 
+  public BinTreeNode<T> findLargestInSubtree(BinTreeNode<T> root){
+    if(root != null){
+      BinTreeNode<T> node = findLargestInSubtree(root.getRightChild());
+      if(node == null) return root;
+      else return node;
+    } else {
+      return null;
+    }
+  }
+
   private void printTreeR(BinTreeNode<T> root){
     if(root != null){
       System.out.print("\033[1;37;44m "+root.getKey()+" \033[0m");

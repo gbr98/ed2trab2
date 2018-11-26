@@ -1,6 +1,6 @@
 class RnBTreeNode<T> extends BinTreeNode<T> {
 
-  private int color; //0 - black | 1 - red
+  private int color; //0 - black | 1 - red | -1 - double black
 
   public RnBTreeNode(int key, T value, BinTreeNode<T> parent){
     super(key, value, parent);
@@ -13,5 +13,9 @@ class RnBTreeNode<T> extends BinTreeNode<T> {
 
   public int getColor(){
     return this.color;
+  }
+
+  public void setColor(int color){
+    this.color = color;
   }
 }

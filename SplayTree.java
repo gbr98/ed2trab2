@@ -100,14 +100,4 @@ class SplayTree<T> extends BinSearchTree<T> {
       return null;
     }
   }
-
-  public BinTreeNode<T> findLargestInSubtree(BinTreeNode<T> root){
-    if(root != null){
-      BinTreeNode<T> node = findLargestInSubtree(root.getRightChild());
-      if(node == null) return root;
-      else return node;
-    } else {
-      return null;
-    }
-  }
 }
