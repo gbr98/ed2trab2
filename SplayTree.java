@@ -69,7 +69,45 @@ class SplayTree<T> extends BinSearchTree<T> {
   @Override
   public T search(int key){
     BinTreeNode<T> node = searchNode(key);
-    rotate(node);
-    return node.getValue();
+    if(node != null){
+      rotate(node);
+      return node.getValue();
+    } else {
+      return null;
+    }
+  }
+
+  @Override
+  public T remove(int key){
+    BinTreeNode<T> node = searchNode(key);
+    if(node != null){
+      rotate(node);
+      BinTreeNode<T> largest = findLargestInSubtree(node.getLeftChild());
+      largest.getParent().setRightChild(largest.getLeftChild());
+      if(largest.getLeftChild() != null)
+        largest.getLeftChild().setParent(largest.getParent());
+
+      largest.setParent(null);
+      node.getLeftChild().setParent(largest);
+      node.getRightChild().setParent(largest);
+      largest.setLeftChild(node.getLeftChild());
+      largest.setRightChild(node.getRightChild());
+      this.setRoot(largest);
+      addCopy(8);
+
+      return node.getValue();
+    } else {
+      return null;
+    }
+  }
+
+  public BinTreeNode<T> findLargestInSubtree(BinTreeNode<T> root){
+    if(root != null){
+      BinTreeNode<T> node = findLargestInSubtree(root.getRightChild());
+      if(node == null) return root;
+      else return node;
+    } else {
+      return null;
+    }
   }
 }
