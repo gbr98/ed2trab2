@@ -13,8 +13,8 @@ class Main {
 
     for(int n : values){
 
-      BinSearchTree<Deputies>[] trees = new BinSearchTree[5];
-      BinSearchTree<Deputies>[] treesBk = new BinSearchTree[5];
+      SearchTree<Deputies>[] trees = new SearchTree[5];
+      SearchTree<Deputies>[] treesBk = new SearchTree[5];
 
       int[][] time = new int[trees.length][5]; //5 steps
       int[][] comp = new int[trees.length][5];
@@ -133,7 +133,7 @@ class Main {
   /**
   * Return the time (in milliseconds) taken to fill the tree.
   */
-  private static long fillTree(BinSearchTree<Deputies> tree, Deputies[] dep){
+  private static long fillTree(SearchTree<Deputies> tree, Deputies[] dep){
     long startTime = System.currentTimeMillis();
     for(Deputies d : dep){
       tree.add(d.getID(), d);
@@ -146,7 +146,7 @@ class Main {
   * Return the time (in milliseconds) taken to search for all
   * values in searchSet.
   */
-  public static long searchAll(BinSearchTree<Deputies> tree, int[] searchSet){
+  public static long searchAll(SearchTree<Deputies> tree, int[] searchSet){
     long startTime = System.currentTimeMillis();
     for(int key : searchSet){
       tree.search(key);
@@ -155,7 +155,7 @@ class Main {
     return stopTime - startTime;
   }
 
-  public static long removeAll(BinSearchTree<Deputies> tree, int[] remSet){
+  public static long removeAll(SearchTree<Deputies> tree, int[] remSet){
     long startTime = System.currentTimeMillis();
     for(int key : remSet){
       tree.remove(key);
