@@ -41,30 +41,40 @@ class RnBTree<T> extends BinSearchTree<T> {
   public T remove(int key){
     RnBTreeNode<T> node = (RnBTreeNode<T>) searchNode(key);
     if(node != null){
-      RnBTreeNode<T> largest = (RnBTreeNode<T>) findLargestInSubtree(node.getLeftChild());
-      largest.getParent().setRightChild(largest.getLeftChild());
-      if(largest.getLeftChild() != null)
-        largest.getLeftChild().setParent(largest.getParent());
-
-      largest.setParent(node.getParent());
-      if(node.getParent().getRightChild() == node){
-        node.getParent().setRightChild(largest);
-      } else {
-        node.getParent().setLeftChild(largest);
+      if(node.getLeftChild() == null){
+        setRoot(node.getRightChild());
+        if(this.getRoot()!=null){
+          ((RnBTreeNode<T>)this.getRoot()).setColor(0);
+        }
+        return node.getValue();
       }
-      node.getLeftChild().setParent(largest);
-      node.getRightChild().setParent(largest);
-      largest.setLeftChild(node.getLeftChild());
-      largest.setRightChild(node.getRightChild());
-      this.setRoot(largest);
+      RnBTreeNode<T> largest = (RnBTreeNode<T>) findLargestInSubtree(node.getLeftChild());
+
+      RnBTreeNode<T> largestCopy = new RnBTreeNode<>(largest.getKey(), largest.getValue(), largest.getParent());
+      largestCopy.setColor(largest.getColor());
+      largestCopy.setRightChild(largest.getRightChild());
+      largestCopy.setLeftChild(largest.getLeftChild());
+
+      largestCopy.setParent(node.getParent());
+      if(node.getParent() != null){
+        if(node.getParent().getRightChild() == node){
+          node.getParent().setRightChild(largestCopy);
+        } else {
+          node.getParent().setLeftChild(largestCopy);
+        }
+      } else {
+        setRoot(largestCopy);
+      }
+      if(node.getLeftChild() != null)
+        node.getLeftChild().setParent(largestCopy);
+      if(node.getRightChild() != null)
+        node.getRightChild().setParent(largestCopy);
+      largestCopy.setLeftChild(node.getLeftChild());
+      largestCopy.setRightChild(node.getRightChild());
       addCopy(8);
 
-      if(node.getColor() == 1 || ((RnBTreeNode<T>)node.getRightChild()).getColor() == 1){
-        //simple case
-        largest.setColor(0);
-      } else {
-
-      }
+      largest.setColor(-1); //-1 == double black
+      rotateDoubleBlack(largest);
 
       return node.getValue();
     } else {
@@ -131,6 +141,111 @@ class RnBTree<T> extends BinSearchTree<T> {
       gparent.recolorize();
       rotate(node);
       return;
+    }
+  }
+
+  /**
+  * Recursive function to remove double-blackness
+  */
+  private void rotateDoubleBlack(RnBTreeNode<T> largest){
+    if(largest.getParent() == null){ //root
+      largest.setColor(0);
+      return;
+    }
+    //verify that rightChild != null
+    RnBTreeNode<T> leftChild = (RnBTreeNode<T>)largest.getLeftChild();
+    int leftChildColorL = (leftChild == null ? 0 : leftChild.getColor());
+    if(largest.getColor() == 1 || leftChildColorL == 1){
+      //simple case
+      if(largest.getParent().getRightChild() == largest){
+        largest.getParent().setRightChild(leftChild);
+      } else {
+        largest.getParent().setLeftChild(leftChild);
+      }
+      if(leftChild != null){
+        leftChild.setParent(largest.getParent());
+        leftChild.setColor(0);
+      }
+    } else {
+      //uhg...
+      //both largest and leftChild are black => double black
+      //in this case, leftChild must be NULL (black height)
+
+      RnBTreeNode<T> sibling = null;
+      if(largest.getParent().getRightChild() == largest){
+        sibling = (RnBTreeNode<T>)largest.getParent().getLeftChild();
+      } else {
+        sibling = (RnBTreeNode<T>)largest.getParent().getRightChild();
+      }
+      int siblingColor = (sibling == null ? 0 : sibling.getColor());
+      if(siblingColor == 0){
+        //CASE 1: sibling is black and one of its children is red
+        if(sibling != null){ // if sibling is NULL, none of its "children" are red
+          int rightChildColor = (sibling.getRightChild() == null ? 0 : ((RnBTreeNode<T>)sibling.getRightChild()).getColor());
+          int leftChildColor = (sibling.getLeftChild() == null ? 0 : ((RnBTreeNode<T>)sibling.getLeftChild()).getColor());
+          if(sibling.getParent().getRightChild() == sibling){
+            //sibling is right child
+            if(rightChildColor == 1){
+              //sibling's rightChild is red
+              rotateLeft(sibling.getRightChild()); //double rotate Left
+              removeDoubleBlack(largest);
+              return;
+            } else if(leftChildColor == 1){
+              //sibling's leftChild is red
+              rotateRL(sibling.getLeftChild()); //rotate Right-Left
+              removeDoubleBlack(largest);
+              return;
+            }
+          } else {
+            //sibling is left child
+            if(rightChildColor == 1){
+              //sibling's rightChild is red
+              rotateLR(sibling.getRightChild()); //rotate Left-Right
+              removeDoubleBlack(largest);
+              return;
+            } else if(leftChildColor == 1){
+              //sibling's leftChild is red
+              rotateRight(sibling.getLeftChild()); //double rotate Right
+              removeDoubleBlack(largest);
+              return;
+            }
+          }
+        }
+
+        //CASE 2: both sibling's children are black
+        if(sibling != null)
+          sibling.setColor(1); //red
+        if(((RnBTreeNode<T>)largest.getParent()).getColor() == 0){
+          rotateDoubleBlack((RnBTreeNode<T>)largest.getParent());
+          removeDoubleBlack(largest);
+          return;
+        } else {
+          ((RnBTreeNode<T>)largest.getParent()).setColor(0);
+          removeDoubleBlack(largest);
+          return;
+        }
+      } else {
+        //CASE 3: sibling is red (can't be NULL)
+        sibling.recolorize();
+        ((RnBTreeNode<T>)sibling.getParent()).recolorize();
+        if(sibling.getParent().getRightChild() == sibling){
+          simpleRotateLeft(sibling);
+        } else {
+          simpleRotateRight(sibling);
+        }
+        rotateDoubleBlack(largest);
+        return;
+      }
+    }
+  }
+
+  private void removeDoubleBlack(RnBTreeNode<T> db){
+    if(db.getColor() == -1){
+      if(db.getParent().getRightChild() == db){
+        db.getParent().setRightChild(null);
+      } else {
+        db.getParent().setLeftChild(null);
+      }
     }
   }
 
