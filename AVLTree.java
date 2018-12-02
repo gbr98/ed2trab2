@@ -1,6 +1,7 @@
-class AVLTree<T> extends BinSearchTree<T> {
+class AVLTree<T> extends BinSearchTree<T>
+{
 
-    private BinTreeNode root;
+  private BinTreeNode root;
     private int key;
 
     public AVLTree() {

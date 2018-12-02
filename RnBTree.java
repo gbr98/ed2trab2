@@ -41,14 +41,12 @@ class RnBTree<T> extends BinSearchTree<T> {
   public T remove(int key){
     RnBTreeNode<T> node = (RnBTreeNode<T>) searchNode(key);
     if(node != null){
+      RnBTreeNode<T> largest = null;
       if(node.getLeftChild() == null){
-        setRoot(node.getRightChild());
-        if(this.getRoot()!=null){
-          ((RnBTreeNode<T>)this.getRoot()).setColor(0);
-        }
-        return node.getValue();
+        largest = node;
+      } else {
+        largest = (RnBTreeNode<T>) findLargestInSubtree(node.getLeftChild());
       }
-      RnBTreeNode<T> largest = (RnBTreeNode<T>) findLargestInSubtree(node.getLeftChild());
 
       RnBTreeNode<T> largestCopy = new RnBTreeNode<>(largest.getKey(), largest.getValue(), largest.getParent());
       largestCopy.setColor(largest.getColor());

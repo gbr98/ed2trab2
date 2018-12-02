@@ -223,5 +223,7 @@ class Main {
     System.out.println("Searching for 7");
     st.search(7);
     st.printTree();
+    st.remove(3);
+    st.printTree();
   }
 }
